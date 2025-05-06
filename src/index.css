@@ -2,28 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  /* Estilo do cabeçalho */
-  .header-ofertas {
-    @apply bg-roxo-800 text-white text-2xl font-bold p-4 rounded-t-lg;
-  }
 
-  /* Estilo dos cards/filtros */
-  .card-fundo {
-    @apply bg-gray-900/90 text-white; /* Preto suave com 90% de opacidade */
-  }
-
-  /* Estilo dos combobox - removendo transparência */
-  .combobox-filtro {
-    @apply bg-gray-800 border-gray-700 text-white;
-  }
-
-  .combobox-filtro:focus {
-    @apply ring-2 ring-roxo-500 border-roxo-500;
-  }
+body {
+  @apply bg-gray-900 text-white font-sans antialiased;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+              Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 
+              'Helvetica Neue', sans-serif;
 }
 
-/* Estilos globais */
-body {
-  @apply bg-gray-950 text-white; /* Fundo preto escuro */
+
+.filtros-container {
+  @apply bg-gray-800 p-4 rounded-lg shadow-xl;
+}
+
+
+.combobox {
+  @apply bg-gray-700 text-white border border-gray-600 rounded-md 
+         px-3 py-2 focus:ring-2 focus:ring-purple-500 focus:outline-none 
+         transition-colors;
+}
+
+
+.combobox-item {
+  @apply bg-gray-700 text-white hover:bg-purple-600 px-3 py-2;
+}
+
+
+.game-card {
+  @apply bg-gray-800 rounded-lg overflow-hidden shadow-md;
+}
+
+
+.hover-scale {
+  @apply transition-transform duration-300 hover:scale-105;
+}
+
+
+.text-primary {
+  @apply text-white;
+}
+
+.text-secondary {
+  @apply text-gray-300;
+}
+
+
+.select__control, .select__menu, .select__option {
+  background-color: #374151 !important; /* gray-700 */
+  color: white !important;
+}
+
+.select__option--is-focused {
+  background-color: #7C3AED !important; /* purple-600 */
 }

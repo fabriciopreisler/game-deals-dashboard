@@ -6,13 +6,13 @@ export const colunas: ColumnDef<Jogo>[] = [
   {
     accessorKey: "titulo",
     header: "Jogo",
-    cell: ({ row }) => <span className="font-medium">{row.getValue("titulo")}</span>,
+    cell: ({ row }) => <span className="font-medium text-white">{row.getValue("titulo")}</span>,
   },
   {
     accessorKey: "precoAtual",
     header: "Preço Atual",
     cell: ({ row }) => (
-      <span className="text-green-400">
+      <span className="text-green-400 font-medium">
         {formatarMoeda(Number(row.getValue("precoAtual")))}
       </span>
     ),
@@ -21,7 +21,7 @@ export const colunas: ColumnDef<Jogo>[] = [
     accessorKey: "desconto",
     header: "Desconto",
     cell: ({ row }) => (
-      <span className="text-red-400">
+      <span className="text-red-400 font-medium">
         {row.getValue("desconto")}%
       </span>
     ),
@@ -34,6 +34,8 @@ export const colunas: ColumnDef<Jogo>[] = [
         "1": "Steam",
         "2": "Epic",
         "3": "GOG",
+        "4": "Humble Store",
+        "5": "Fanatical"
       };
       const lojaValue = row.getValue("loja") as string;
       return <span className="text-white">{lojas[lojaValue] || lojaValue}</span>;

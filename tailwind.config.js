@@ -14,23 +14,20 @@ module.exports = {
           300: '#c4b5fd',
           400: '#a78bfa',
           500: '#8b5cf6',
-          600: '#7c3aed',
+          600: '#7c3aed', // Cor principal para botões ativos
           700: '#6b46c1',
-          800: '#4a1d96', // Roxo escuro para cabeçalhos
+          800: '#4a1d96',
           900: '#3b0764',
         },
         gray: {
-          800: '#1f2937',  // Para comboboxes
-          900: '#111827',  // Para cards/fundos
-          950: '#030712',  // Para fundo da página
+          200: '#e5e7eb',
+          400: '#9ca3af',
+          600: '#4b5563',
+          800: '#1f2937', // Fundo do combobox
+          900: '#111827', // Fundo escuro
+          950: '#030712',
         }
       },
-      boxShadow: {
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.25)',
-      },
-      borderRadius: {
-        'lg': '0.5rem',
-      }
     },
   },
   plugins: [

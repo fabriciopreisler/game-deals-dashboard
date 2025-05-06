@@ -37,32 +37,59 @@ Passo a Passo
 Clone o repositório:
 
 
-git clone https://github.com/fabriciopreisler/game-deals-dashboard.git
+git clone:
+
+https://github.com/fabriciopreisler/game-deals-dashboard.git
+
 cd game-deals-dashboard
+
 Instale as dependências:
 
 npm install
+
+npm install react-helmet @types/react-helmet
+
+npm install @tanstack/react-table
+
+npm install @tailwindcss/forms
+
+npm install axios
+
 
 Execute o projeto:
 
 npm start
 
-Acesse: http://localhost:3000
+Acesse: 
+
+http://localhost:3000
 
 Estrutura do Projeto
 src/
 ├── assets/            # Imagens e recursos estáticos
+
 ├── components/        # Componentes reutilizáveis
+
 │   ├── ui/           # Componentes UI (ShadCN)
+
 │   ├── tabela/       # Tabela de jogos
+
 │   ├── filtros/      # Componentes de filtro
+
 │   └── modal/        # Modal de detalhes
+
 ├── hooks/            # Custom hooks
+
 ├── lib/              # Utilitários e configurações
+
 ├── services/         # Lógica de API
+
 ├── stores/           # Gerenciamento de estado
+
 ├── types/            # Tipos TypeScript
+
 └── views/            # Páginas principais
+
 Funcionalidades Implementadas
 Tabela Dinâmica de Jogos
 Exibição paginada de deals
@@ -111,5 +138,8 @@ Utiliza a CheapShark API com os seguintes endpoints:
 
 Desenvolvido por Fabrício Preisler
 
-GitHub: https://github.com/fabriciopreisler
-Portfólio:https://heylink.me/FabricioPreisler
+GitHub: 
+https://github.com/fabriciopreisler
+
+Portfólio:
+https://heylink.me/FabricioPreisler
