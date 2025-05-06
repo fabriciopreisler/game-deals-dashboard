@@ -45,13 +45,15 @@ export const CartaoJogo = ({ jogo, aoClicar }: CartaoJogoProps) => {
           )}
         </div>
         
-        <div className="mt-2 flex flex-wrap gap-1">
-          {jogo.plataformas?.map(plataforma => (
-            <span key={plataforma} className="bg-gray-100 px-2 py-1 rounded text-xs">
-              {plataforma}
-            </span>
-          ))}
-        </div>
+        {jogo.plataformas && jogo.plataformas.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {jogo.plataformas.map((plataforma) => (
+              <span key={plataforma} className="bg-gray-100 px-2 py-1 rounded text-xs">
+                {plataforma}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

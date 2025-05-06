@@ -23,3 +23,13 @@ code {
 .card:hover .card-image {
   transform: scale(1.03);
 }
+
+
+select option {
+  background: #374151; /* bg-gray-700 */
+  color: white;
+}
+
+select:focus option:checked {
+  background: #7c3aed; /* bg-purple-600 */
+}

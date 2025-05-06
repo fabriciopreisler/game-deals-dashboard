@@ -1,11 +1,11 @@
-export const formatarMoeda = (valor: number): string => {
-    return valor.toLocaleString('pt-BR', {
+// src/utils/formatadores.ts
+export function formatarMoeda(valor: number): string {
+    return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
       currency: 'BRL'
-    });
-  };
+    }).format(valor);
+  }
   
-  export const formatarData = (dataString: string): string => {
-    const data = new Date(dataString);
-    return data.toLocaleDateString('pt-BR');
-  };
+  export function formatarPorcentagem(valor: number): string {
+    return `${Math.round(valor)}%`;
+  }

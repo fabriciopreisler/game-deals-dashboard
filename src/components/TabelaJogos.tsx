@@ -48,13 +48,13 @@ export function TabelaJogos({ data }: TabelaJogosProps) {
   return (
     <div className="rounded-md border">
       <table className="w-full">
-        <thead className="bg-gray-50">
+      <thead className="bg-gray-600 text-white font-bold">
           {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map(header => (
                 <th 
                   key={header.id} 
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider"
                 >
                   {flexRender(header.column.columnDef.header, header.getContext())}
                 </th>
@@ -62,9 +62,9 @@ export function TabelaJogos({ data }: TabelaJogosProps) {
             </tr>
           ))}
         </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+        <tbody className="bg-gray-800 divide-y divide-gray-600 text-white">
           {table.getRowModel().rows.map(row => (
-            <tr key={row.id} className="hover:bg-gray-50">
+            <tr key={row.id} className="hover:bg-purple-600 hover:text-white">
               {row.getVisibleCells().map(cell => (
                 <td key={cell.id} className="px-6 py-4 whitespace-nowrap">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
