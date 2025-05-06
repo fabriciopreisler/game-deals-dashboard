@@ -20,7 +20,7 @@ function App() {
 
   const [visualizacao, setVisualizacao] = useState<'tabela' | 'cartoes'>('tabela');
 
-  // Dados mockados - substitua por dados reais da API
+
   const jogos: Jogo[] = [
     {
       id: '1',
@@ -35,12 +35,12 @@ function App() {
       metacritic: 93,
       plataformas: ['PC', 'PS4', 'XBOX']
     },
-    // Adicione mais jogos conforme necessário
+
   ];
 
   const handleCartaoClick = (jogo: Jogo) => {
     console.log('Jogo selecionado:', jogo.titulo);
-    // Aqui você pode abrir o modal de detalhes
+
   };
 
   return (

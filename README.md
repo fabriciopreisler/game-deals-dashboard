@@ -1,46 +1,123 @@
-# Getting Started with Create React App
+ Descrição
+Este é um sistema de jogos desenvolvido com Node.js, oferecendo uma coleção de jogos simples ou uma plataforma para jogos (ajuste conforme sua necessidade).
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+⚙️ Pré-requisitos
+Node.js (versão 16.x ou superior)
 
-## Available Scripts
+npm (vem com o Node.js) ou yarn
 
-In the project directory, you can run:
+Git (opcional, para versionamento)
 
-### `npm start`
+� Como instalar e executar
+1. Clone o repositório
+bash
+git clone https://github.com/seu-usuario/sistema-jogos.git  
+cd sistema-jogos  
+2. Instale as dependências
+bash
+npm install  
+3. Execute o projeto
+bash
+npm start  
+O sistema estará disponível em:
+🔗 http://localhost:3000 (ou outra porta, se configurada)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+📂 Estrutura do projeto
+sistema-jogos/  
+├── node_modules/   # Bibliotecas instaladas  
+├── src/            # Código principal  
+│   ├── games/      # Jogos incluídos  
+│   ├── assets/     # Imagens, sons, etc.  
+│   └── index.js    # Arquivo principal  
+├── package.json    # Configurações e dependências  
+└── README.md       #
+ Desafio Frontend: Game Deals Dashboard – CheapShark API
+Desenvolva um dashboard de ofertas de jogos utilizando a CheapShark API com foco  em design moderno e experiência de usuário.
+link: https://apidocs.cheapshark.com/
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+ Tecnologias Recomendadas
+    • ReactJS 
+    • TailwindCSS
+    • Qualquer biblioteca de UI: Shadcn/UI, Lucide Icons, Radix UI, ou similar
+    • Axios 
+    • (Opcional) TypeScript
+ Funcionalidades obrigatórias
+1.  Data Table de Jogos
+    • Exibir os jogos retornados pela API /deals em um data table.
+    • A tabela deve conter:
+        ◦ Nome do jogo
+        ◦ Preço atual
+        ◦ Preço original
+        ◦ Porcentagem de desconto
+        ◦ Loja
+        ◦ Nota (Deal Rating)
+ Pode usar bibliotecas como @tanstack/react-table, shadcn/ui (data-table), ou criar sua própria.
 
-### `npm test`
+2.  Filtros e Selects
+    • Filtro por loja (storeID)
+    • Filtro por faixa de preço (lowerPrice e upperPrice)
+    • Filtro por porcentagem mínima de desconto
+    • Select para ordenar por:
+        ◦ Price
+        ◦ Savings
+        ◦ Deal Rating
+    • Campo de busca por título
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3.  Modal de Detalhes
+    • Ao clicar em uma linha da tabela ou card, abrir um modal com mais detalhes sobre o jogo:
+        ◦ Nome do jogo
+        ◦ Imagem maior
+        ◦ Preços (atual e original)
+        ◦ Loja
+        ◦ Histórico de menor preço (historicalLow)
+        ◦ Link para compra
 
-### `npm run build`
+4.  Componentização
+    • Criar componentes reutilizáveis, organizados por pastas:
+        ◦ <DataTable />
+        ◦ <GameModal />
+        ◦ <FilterSidebar /> ou <FilterControls />
+        ◦ <Select />, <Input />, <PriceRange />
+        ◦ <GameCard /> (caso deseje um modo de visualização alternativo)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+5.  Design e UX
+    • Layout moderno e responsivo.
+    • Modais, transições suaves e boa hierarquia visual.
+    • Ícones e elementos interativos com feedback visual (hover, foco, loading).
+    • Tema escuro/claro (opcional).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+ Extras (Diferenciais)
+    • Scroll infinito ou paginação
+    • Salvamento de favoritos com localStorage/cookies
+    • Skeleton loaders
+    • Toggle para mudar entre modo tabela e modo cards
+Game Deals Dashboard - CheapShark API
+Desenvolvido por Fabrício Preisler
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Visão Geral
+Dashboard interativo de ofertas de jogos que consome a CheapShark API, desenvolvido com React e TailwindCSS. Oferece uma experiência moderna para descobrir os melhores deals de jogos entre diversas lojas.
 
-### `npm run eject`
+Funcionalidades Principais
+Tabela dinâmica de jogos com filtros avançados
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Sistema de busca e ordenação
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Modal de detalhes com histórico de preços
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+ Design responsivo com tema escuro/claro
 
-## Learn More
+ Performance otimizada com lazy loading
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ Tecnologias Utilizadas
+React 18 (Vite)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+TypeScript
+
+TailwindCSS + ShadCN/ui
+
+Axios para chamadas API
+
+React Query para gerenciamento de estado
+
+Desenvolvido por Fabrício Preisler
