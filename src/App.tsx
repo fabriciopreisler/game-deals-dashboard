@@ -60,7 +60,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-950 p-4">
       <header className="bg-roxo-800 text-white p-4 rounded-lg mb-4 shadow-md flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Ofertas de Jogos</h1>
+        <h1 className="text-2xl font-bold">Descontos Explosivos </h1>
         <div className="flex items-center">
           <img 
             src={`${process.env.PUBLIC_URL}/img/BuscaFire.png`}
