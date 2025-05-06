@@ -21,27 +21,19 @@ function App() {
   const [visualizacao, setVisualizacao] = useState<'tabela' | 'cartoes'>('tabela');
 
   useEffect(() => {
-    const params: Record<string, any> = {
-      onSale: 1,
-      pageSize: 20
-    };
-
-    if (filtros.loja) params.storeID = filtros.loja;
-    if (filtros.titulo) params.title = filtros.titulo;
-    if (filtros.precoMin) params.lowerPrice = filtros.precoMin;
-    if (filtros.precoMax) params.upperPrice = filtros.precoMax;
-    if (filtros.descontoMin) params.minSavings = filtros.descontoMin;
-    if (filtros.ordenarPor) params.sortBy = filtros.ordenarPor;
-
-    carregarJogos(params);
-  }, [filtros]);
+    // Limpa parâmetros undefined antes de enviar
+    const paramsClean = Object.fromEntries(
+      Object.entries(filtros).filter(([_, v]) => v !== undefined)
+    );
+    carregarJogos(paramsClean);
+  }, [filtros]); // Apenas filtros como dependência
 
   if (loading) {
     return (
       <div className="min-h-screen bg-roxo p-4 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
-          <p className="mt-4 text-white">Carregando jogos...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500 mx-auto"></div>
+          <p className="mt-4 text-white">Carregando ofertas...</p>
         </div>
       </div>
     );
@@ -50,12 +42,12 @@ function App() {
   if (error) {
     return (
       <div className="min-h-screen bg-roxo p-4 flex items-center justify-center">
-        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md">
-          <h2 className="text-xl font-bold text-red-600 mb-2">Erro ao carregar</h2>
+        <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
+          <h2 className="text-xl font-bold text-red-600 mb-2">Ocorreu um erro</h2>
           <p className="mb-4">{error}</p>
           <button 
             onClick={() => window.location.reload()}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
           >
             Tentar novamente
           </button>
@@ -66,9 +58,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-roxo p-4">
-      <header className="bg-header-verde text-gray-900 p-4 rounded-lg mb-6 shadow-md">
-        <h1 className="text-2xl font-bold">Ofertas de Jogos</h1>
-      </header>
+<header className="header-ofertas rounded-t-lg">
+  <h1>Ofertas de Jogos</h1>
+</header>
 
       <main className="container mx-auto">
         <Filtros filtros={filtros} setFiltros={setFiltros} lojas={lojas} />
@@ -79,14 +71,24 @@ function App() {
           onValueChange={(value) => setVisualizacao(value as 'tabela' | 'cartoes')}
         >
           <TabsList className="grid grid-cols-2 w-64 bg-white">
-            <TabsTrigger value="tabela">Tabela</TabsTrigger>
-            <TabsTrigger value="cartoes">Cartões</TabsTrigger>
+            <TabsTrigger 
+              value="tabela"
+              className="data-[state=active]:bg-green-200 data-[state=active]:text-gray-900"
+            >
+              Tabela
+            </TabsTrigger>
+            <TabsTrigger 
+              value="cartoes"
+              className="data-[state=active]:bg-green-200 data-[state=active]:text-gray-900"
+            >
+              Cartões
+            </TabsTrigger>
           </TabsList>
         </Tabs>
 
         {jogos.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
-            <p className="text-lg">Nenhum jogo encontrado com esses filtros.</p>
+            <p className="text-lg mb-4">Nenhum jogo encontrado com esses filtros</p>
             <button 
               onClick={() => setFiltros({
                 loja: undefined,
@@ -97,13 +99,13 @@ function App() {
                 titulo: undefined,
                 plataforma: undefined
               })}
-              className="mt-4 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors"
             >
               Limpar filtros
             </button>
           </div>
         ) : visualizacao === 'tabela' ? (
-          <div className="bg-white rounded-lg shadow p-4">
+          <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
             <TabelaJogos data={jogos} />
           </div>
         ) : (

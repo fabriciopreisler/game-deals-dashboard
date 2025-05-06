@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Jogo } from '../types/tipos';
+import { useEffect, useState, useCallback } from 'react';
+import { makeApiCall } from '../api/apiService';
+import { Jogo, Filtros } from '../types/tipos';
+import { jogosMockados, lojasMockadas } from '../api/mockData';
 
-const API_URL = 'https://www.cheapshark.com/api/1.0';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
 export const useJogos = () => {
   const [jogos, setJogos] = useState<Jogo[]>([]);
@@ -10,54 +11,96 @@ export const useJogos = () => {
   const [error, setError] = useState<string | null>(null);
   const [lojas, setLojas] = useState<Record<string, string>>({});
 
-  const carregarJogos = async (params: Record<string, any> = {}) => {
+  const carregarDadosMockados = useCallback(() => {
+    setJogos(jogosMockados);
+    setLojas(lojasMockadas);
+    setError('Usando dados locais devido a limitações da API');
+    setLoading(false);
+  }, []);
+
+  const processarDados = useCallback((deals: any[], stores: any[]) => {
+    const storesMap = stores.reduce((acc: Record<string, string>, store: any) => {
+      if (store?.storeID) acc[store.storeID] = store.storeName;
+      return acc;
+    }, {});
+
+    const jogosFormatados = deals.map((deal: any) => ({
+      id: deal.gameID || '',
+      titulo: deal.title || 'Título não disponível',
+      precoAtual: deal.salePrice ? parseFloat(deal.salePrice) : 0,
+      precoOriginal: deal.normalPrice ? parseFloat(deal.normalPrice) : 0,
+      desconto: deal.savings ? parseFloat(deal.savings) : 0,
+      loja: deal.storeID || '0',
+      avaliacao: deal.dealRating ? parseFloat(deal.dealRating) : 0,
+      capa: deal.thumb ? deal.thumb.replace('http://', 'https://') : '',
+      metacritic: deal.metacriticScore || '0',
+      plataformas: []
+    }));
+
+    return { storesMap, jogosFormatados };
+  }, []);
+
+  const carregarJogos = useCallback(async (params: Filtros = {}) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // Busca ofertas e lojas simultaneamente
-      const [dealsResponse, storesResponse] = await Promise.all([
-        axios.get(`${API_URL}/deals`, { params }),
-        axios.get(`${API_URL}/stores`)
+      // Construir parâmetros para a API
+      const apiParams = {
+        pageSize: 20,
+        onSale: 1,
+        ...(params.titulo && { title: params.titulo }),
+        ...(params.loja && { storeID: params.loja }),
+        ...(params.precoMin !== undefined && { lowerPrice: params.precoMin }),
+        ...(params.precoMax !== undefined && { upperPrice: params.precoMax }),
+        ...(params.ordenarPor && { 
+          sortBy: params.ordenarPor === 'preco' ? 'Price' : 
+                 params.ordenarPor === 'desconto' ? 'Savings' : 
+                 'DealRating' 
+        })
+      };
+
+      // Verificação de cache
+      const cacheKey = `cheapshark_${JSON.stringify(apiParams)}`;
+      const cached = localStorage.getItem(cacheKey);
+      
+      if (cached) {
+        const { data, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp < CACHE_DURATION) {
+          setJogos(data.jogos);
+          setLojas(data.lojas);
+          setLoading(false);
+          return;
+        }
+      }
+
+      // Chamadas à API
+      const [deals, stores] = await Promise.all([
+        makeApiCall<any[]>('deals', apiParams),
+        makeApiCall<any[]>('stores')
       ]);
 
-      // Processa as lojas
-      const storesMap = storesResponse.data.reduce((acc: Record<string, string>, store: any) => {
-        acc[store.storeID] = store.storeName;
-        return acc;
-      }, {});
+      const { storesMap, jogosFormatados } = processarDados(deals, stores);
 
-      // Processa os jogos
-      const jogosFormatados = dealsResponse.data.map((deal: any) => ({
-        id: deal.gameID,
-        titulo: deal.title,
-        precoAtual: parseFloat(deal.salePrice),
-        precoOriginal: parseFloat(deal.normalPrice),
-        desconto: parseFloat(deal.savings),
-        loja: deal.storeID,
-        avaliacao: parseFloat(deal.dealRating || '0'),
-        capa: deal.thumb.replace('http://', 'https://'),
-        metacritic: deal.metacriticScore,
-        dealRating: deal.dealRating,
-        plataformas: [] 
+      // Atualiza cache
+      localStorage.setItem(cacheKey, JSON.stringify({
+        data: { jogos: jogosFormatados, lojas: storesMap },
+        timestamp: Date.now()
       }));
 
       setLojas(storesMap);
       setJogos(jogosFormatados);
     } catch (err) {
-      console.error('Erro ao carregar dados:', err);
-      setError('Não foi possível carregar os jogos. Tente novamente mais tarde.');
+      console.error('Erro na API:', err);
+      carregarDadosMockados();
     } finally {
       setLoading(false);
     }
-  };
+  }, [carregarDadosMockados, processarDados]);
 
   useEffect(() => {
-    carregarJogos({
-      pageSize: 20, 
-      onSale: 1    
-    });
-  }, []);
+    carregarJogos({});
+  }, [carregarJogos]);
 
   return { jogos, loading, error, lojas, carregarJogos };
 };
