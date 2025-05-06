@@ -1,4 +1,3 @@
-// src/components/ui/dialog.tsx
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from "react";

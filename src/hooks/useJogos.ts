@@ -10,6 +10,7 @@ export const useJogos = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lojas, setLojas] = useState<Record<string, string>>({});
+  const [filtros, setFiltros] = useState<Filtros>({});
 
   const carregarDadosMockados = useCallback(() => {
     setJogos(jogosMockados);
@@ -40,9 +41,37 @@ export const useJogos = () => {
     return { storesMap, jogosFormatados };
   }, []);
 
+  const aplicarFiltrosLocais = useCallback((jogos: Jogo[], filtros: Filtros) => {
+    return jogos.filter(jogo => {
+      const passaFiltroLoja = !filtros.loja || jogo.loja === filtros.loja;
+      const passaFiltroTitulo = !filtros.titulo || 
+        jogo.titulo.toLowerCase().includes(filtros.titulo.toLowerCase());
+      const passaFiltroPreco = (!filtros.precoMin || jogo.precoAtual >= filtros.precoMin) && 
+        (!filtros.precoMax || jogo.precoAtual <= filtros.precoMax);
+      const passaFiltroDesconto = !filtros.descontoMin || 
+        (jogo.desconto >= filtros.descontoMin);
+      
+      return passaFiltroLoja && passaFiltroTitulo && passaFiltroPreco && passaFiltroDesconto;
+    }).sort((a, b) => {
+      if (!filtros.ordenarPor) return 0;
+      
+      switch (filtros.ordenarPor) {
+        case "preco":
+          return a.precoAtual - b.precoAtual;
+        case "desconto":
+          return b.desconto - a.desconto;
+        case "avaliacao":
+          return b.avaliacao - a.avaliacao;
+        default:
+          return 0;
+      }
+    });
+  }, []);
+
   const carregarJogos = useCallback(async (params: Filtros = {}) => {
     setLoading(true);
     setError(null);
+    setFiltros(params);
 
     try {
       // Construir parâmetros para a API
@@ -67,7 +96,8 @@ export const useJogos = () => {
       if (cached) {
         const { data, timestamp } = JSON.parse(cached);
         if (Date.now() - timestamp < CACHE_DURATION) {
-          setJogos(data.jogos);
+          const jogosFiltrados = aplicarFiltrosLocais(data.jogos, params);
+          setJogos(jogosFiltrados);
           setLojas(data.lojas);
           setLoading(false);
           return;
@@ -81,6 +111,7 @@ export const useJogos = () => {
       ]);
 
       const { storesMap, jogosFormatados } = processarDados(deals, stores);
+      const jogosFiltrados = aplicarFiltrosLocais(jogosFormatados, params);
 
       // Atualiza cache
       localStorage.setItem(cacheKey, JSON.stringify({
@@ -89,18 +120,26 @@ export const useJogos = () => {
       }));
 
       setLojas(storesMap);
-      setJogos(jogosFormatados);
+      setJogos(jogosFiltrados);
     } catch (err) {
       console.error('Erro na API:', err);
       carregarDadosMockados();
     } finally {
       setLoading(false);
     }
-  }, [carregarDadosMockados, processarDados]);
+  }, [carregarDadosMockados, processarDados, aplicarFiltrosLocais]);
 
   useEffect(() => {
     carregarJogos({});
   }, [carregarJogos]);
 
-  return { jogos, loading, error, lojas, carregarJogos };
+  return { 
+    jogos, 
+    loading, 
+    error, 
+    lojas, 
+    filtros,
+    carregarJogos,
+    setFiltros 
+  };
 };

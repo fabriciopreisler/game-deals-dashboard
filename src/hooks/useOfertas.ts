@@ -10,7 +10,7 @@ export const useOfertas = (filtros: Filtros) => {
       setCarregando(true);
       
       const jogosMockados: Jogo[] = [
-        // ... seus dados mockados existentes ...
+
       ];
 
       // Aplicar filtros

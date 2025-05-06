@@ -73,7 +73,6 @@ function App() {
         </div>
       </header>
 
-      {/* Restante do código permanece igual */}
       <main className="container mx-auto">
         <Filtros filtros={filtros} setFiltros={setFiltros} lojas={lojas} />
 
@@ -100,7 +99,7 @@ function App() {
 
         {jogos.length === 0 ? (
           <div className="bg-gray-900 rounded-lg shadow p-8 text-center">
-            <p className="text-lg mb-4 text-white">Nenhum jogo encontrado com esses filtros</p>
+            <p className="text-lg mb-4 text-white">Nenhum jogo encontrado com esses filtros.</p>
             <button 
               onClick={() => setFiltros({
                 loja: undefined,
