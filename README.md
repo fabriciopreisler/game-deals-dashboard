@@ -112,11 +112,6 @@ Informações completas do jogo
 
 Histórico de preços (gráfico)
 
-Link direto para a oferta
-
-Extras Implementados
-Tema escuro/claro com toggle
-
 Favoritos com localStorage
 
 Skeleton loading
