@@ -10,7 +10,7 @@ Sistema de busca e ordenação
 
 Modal de detalhes com histórico de preços
 
-Design responsivo com tema escuro/claro
+Design responsivo
 
 Performance otimizada com lazy loading
 
