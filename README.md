@@ -10,7 +10,7 @@ Sistema de busca e ordenação
 
 Modal de detalhes com histórico de preços
 
-Design responsivo com tema escuro/claro
+Design responsivo
 
 Performance otimizada com lazy loading
 
@@ -111,11 +111,6 @@ Modal de Detalhes
 Informações completas do jogo
 
 Histórico de preços (gráfico)
-
-Link direto para a oferta
-
-Extras Implementados
-Tema escuro/claro com toggle
 
 Favoritos com localStorage
 
