@@ -16,6 +16,21 @@ const delayBetweenCalls = async () => {
   lastCallTime = Date.now();
 };
 
+const normalizeImageUrl = (url: string | undefined) => {
+  if (!url) return 'https://via.placeholder.com/600x300?text=Imagem+Não+Disponível';
+  
+  let normalizedUrl = url
+    .replace('http://', 'https://')
+    .replace('steamcdn-a.akamaihd.net', 'cdn.cloudflare.steamstatic.com')
+    .replace('//cdn.akamai.', '//cdn.cloudflare.');
+  
+  if (normalizedUrl.includes('capsule_sm_120')) {
+    normalizedUrl = normalizedUrl.replace('capsule_sm_120', 'header');
+  }
+  
+  return normalizedUrl;
+};
+
 export interface Deal {
   gameID: string;
   title: string;
@@ -68,9 +83,7 @@ export const fetchDeals = async (params: Record<string, any> = {}) => {
     return response.data.map((deal: Deal) => ({
       ...deal,
       title: deal.title?.trim() || '',
-      thumb: deal.thumb 
-        ? `https://${deal.thumb.replace('http://', '').replace('capsule_sm_120', 'header')}`
-        : '',
+      thumb: normalizeImageUrl(deal.thumb),
       gameID: deal.gameID || `id-${Math.random().toString(36).substr(2, 9)}`,
       storeID: deal.storeID || '1'
     }));

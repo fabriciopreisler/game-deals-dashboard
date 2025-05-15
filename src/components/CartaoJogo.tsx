@@ -8,39 +8,39 @@ interface CartaoJogoProps {
   className?: string;
 }
 
+const getOptimizedImageUrl = (url: string) => {
+  if (!url) return getPlaceholder();
+  
+  try {
+    let optimizedUrl = url.replace('http://', 'https://');
+    
+    if (optimizedUrl.includes('steamcdn-a.akamaihd.net')) {
+      optimizedUrl = optimizedUrl.replace('steamcdn-a.akamaihd.net', 'cdn.cloudflare.steamstatic.com');
+    }
+    
+    if (optimizedUrl.includes('capsule_sm_120')) {
+      optimizedUrl = optimizedUrl.replace('capsule_sm_120', 'header');
+    }
+    
+    return optimizedUrl;
+  } catch {
+    return getPlaceholder();
+  }
+};
+
+const getPlaceholder = () => {
+  return 'https://via.placeholder.com/600x300/1a1a1a/ffffff?text=Imagem+Não+Disponível';
+};
+
 export const CartaoJogo = ({ jogo, aoClicar, className = '' }: CartaoJogoProps) => {
   const [imgSrc, setImgSrc] = useState(() => {
-
     if (!jogo.capa) {
       return getPlaceholder();
     }
-
-
-    let url = jogo.capa;
-    
-
-    url = url.replace('http://', 'https://');
-    
-
-    if (url.includes('steamcdn-a.akamaihd.net')) {
-      url = url.replace('steamcdn-a.akamaihd.net', 'cdn.cloudflare.steamstatic.com');
-    }
-    
-
-    url = url.replace('//cdn.akamai.', '//cdn.cloudflare.');
-    
-
-    url = url.replace('capsule_sm_120', 'header');
-    
-    return url;
+    return getOptimizedImageUrl(jogo.capa);
   });
 
-  const getPlaceholder = () => {
-    return 'https://via.placeholder.com/600x300?text=Imagem+Não+Disponível';
-  };
-
   const handleImageError = () => {
-
     if (imgSrc.includes('header')) {
       const fallbackUrl = imgSrc.replace('header', 'capsule_616x353');
       setImgSrc(fallbackUrl);
@@ -74,6 +74,11 @@ export const CartaoJogo = ({ jogo, aoClicar, className = '' }: CartaoJogoProps) 
           onError={handleImageError}
           loading="lazy"
           decoding="async"
+          style={{
+            backgroundImage: `url(${getPlaceholder()})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
         />
         {jogo.desconto > 0 && (
           <span className="absolute top-2 right-2 bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">
