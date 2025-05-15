@@ -14,13 +14,16 @@ export const CartaoJogo = ({ jogo, aoClicar, className = '' }: CartaoJogoProps) 
       return 'https://via.placeholder.com/300x150?text=Imagem+Não+Disponível';
     }
     
+
     return jogo.capa
       .replace('http://', 'https://')
       .replace('capsule_sm_120', 'header')
-      .replace('//cdn.akamai.', '//cdn.cloudflare.');
+      .replace('//cdn.akamai.', '//cdn.cloudflare.')
+      .replace('steamcdn-a.akamaihd.net', 'cdn.cloudflare.steamstatic.com');
   });
 
   const handleImageError = () => {
+
     setImgSrc('https://via.placeholder.com/300x150?text=Imagem+Indisponível');
   };
 
