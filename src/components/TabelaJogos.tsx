@@ -1,94 +1,50 @@
-import { ColumnDef, useReactTable, getCoreRowModel, flexRender } from "@tanstack/react-table";
-import { formatarMoeda } from "../utils/formatadores";
 import { Jogo } from "../types/tipos";
-
-export const colunas: ColumnDef<Jogo>[] = [
-  {
-    accessorKey: "titulo",
-    header: "Jogo",
-    cell: ({ row }) => <span className="font-medium text-white">{row.getValue("titulo")}</span>,
-  },
-  {
-    accessorKey: "precoAtual",
-    header: "Preço Atual",
-    cell: ({ row }) => (
-      <span className="text-green-400 font-medium">
-        {formatarMoeda(Number(row.getValue("precoAtual")))}
-      </span>
-    ),
-  },
-  {
-    accessorKey: "desconto",
-    header: "Desconto",
-    cell: ({ row }) => (
-      <span className="text-red-400 font-medium">
-        {row.getValue("desconto")}%
-      </span>
-    ),
-  },
-  {
-    accessorKey: "loja",
-    header: "Loja",
-    cell: ({ row }) => {
-      const lojas: Record<string, string> = {
-        "1": "Steam",
-        "2": "Epic",
-        "3": "GOG",
-        "4": "Humble Store",
-        "5": "Fanatical"
-      };
-      const lojaValue = row.getValue("loja") as string;
-      return <span className="text-white">{lojas[lojaValue] || lojaValue}</span>;
-    },
-  },
-];
+import { formatarMoeda } from "../utils/formatadores";
 
 interface TabelaJogosProps {
   data: Jogo[];
+  onRowClick: (jogo: Jogo) => void;
 }
 
-export function TabelaJogos({ data }: TabelaJogosProps) {
-  const table = useReactTable({
-    data,
-    columns: colunas,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
+export const TabelaJogos = ({ data, onRowClick }: TabelaJogosProps) => {
   return (
-    <div className="rounded-lg overflow-hidden shadow-lg border border-gray-700">
-      <table className="w-full">
+    <div className="overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-700">
         <thead className="bg-roxo-800">
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th 
-                  key={header.id} 
-                  className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider"
-                >
-                  {flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
+          <tr>
+            <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">Jogo</th>
+            <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">Preço Atual</th>
+            <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">Desconto</th>
+            <th className="px-6 py-4 text-left text-sm font-semibold text-white uppercase tracking-wider">Loja</th>
+          </tr>
         </thead>
-        <tbody className="bg-gray-900/90 divide-y divide-gray-800">
-          {table.getRowModel().rows.map(row => (
+        <tbody className="bg-gray-900 divide-y divide-gray-700">
+          {data.map((jogo) => (
             <tr 
-              key={row.id} 
-              className="hover:bg-gray-800/70 transition-colors duration-150"
+              key={jogo.id} 
+              onClick={() => onRowClick(jogo)}
+              className="hover:bg-purple-900/30 cursor-pointer transition-colors"
             >
-              {row.getVisibleCells().map(cell => (
-                <td 
-                  key={cell.id} 
-                  className="px-6 py-4 whitespace-nowrap text-sm"
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+                {jogo.titulo}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-green-400">
+                {formatarMoeda(jogo.precoAtual)}
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm">
+                <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                  jogo.desconto > 0 ? 'bg-green-600 text-white' : 'bg-gray-700 text-gray-300'
+                }`}>
+                  {jogo.desconto > 0 ? `-${Math.round(jogo.desconto)}%` : 'Sem desconto'}
+                </span>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                {jogo.lojaNome}
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
