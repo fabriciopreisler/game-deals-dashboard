@@ -10,21 +10,43 @@ interface CartaoJogoProps {
 
 export const CartaoJogo = ({ jogo, aoClicar, className = '' }: CartaoJogoProps) => {
   const [imgSrc, setImgSrc] = useState(() => {
+
     if (!jogo.capa) {
-      return 'https://via.placeholder.com/300x150?text=Imagem+Não+Disponível';
+      return getPlaceholder();
+    }
+
+
+    let url = jogo.capa;
+    
+
+    url = url.replace('http://', 'https://');
+    
+
+    if (url.includes('steamcdn-a.akamaihd.net')) {
+      url = url.replace('steamcdn-a.akamaihd.net', 'cdn.cloudflare.steamstatic.com');
     }
     
 
-    return jogo.capa
-      .replace('http://', 'https://')
-      .replace('capsule_sm_120', 'header')
-      .replace('//cdn.akamai.', '//cdn.cloudflare.')
-      .replace('steamcdn-a.akamaihd.net', 'cdn.cloudflare.steamstatic.com');
+    url = url.replace('//cdn.akamai.', '//cdn.cloudflare.');
+    
+
+    url = url.replace('capsule_sm_120', 'header');
+    
+    return url;
   });
+
+  const getPlaceholder = () => {
+    return 'https://via.placeholder.com/600x300?text=Imagem+Não+Disponível';
+  };
 
   const handleImageError = () => {
 
-    setImgSrc('https://via.placeholder.com/300x150?text=Imagem+Indisponível');
+    if (imgSrc.includes('header')) {
+      const fallbackUrl = imgSrc.replace('header', 'capsule_616x353');
+      setImgSrc(fallbackUrl);
+      return;
+    }
+    setImgSrc(getPlaceholder());
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -42,7 +64,6 @@ export const CartaoJogo = ({ jogo, aoClicar, className = '' }: CartaoJogoProps) 
       onKeyDown={handleKeyDown}
       aria-label={`Ver detalhes de ${jogo.titulo}`}
     >
-      {/* Efeito hover original */}
       <div className="absolute inset-0 bg-purple-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300 z-10"></div>
       
       <div className="relative pt-[56.25%] overflow-hidden bg-gray-900">
@@ -52,6 +73,7 @@ export const CartaoJogo = ({ jogo, aoClicar, className = '' }: CartaoJogoProps) 
           className="absolute top-0 left-0 w-full h-full object-cover"
           onError={handleImageError}
           loading="lazy"
+          decoding="async"
         />
         {jogo.desconto > 0 && (
           <span className="absolute top-2 right-2 bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">
